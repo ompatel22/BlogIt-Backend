@@ -6,7 +6,6 @@ import jakarta.validation.constraints.Size;
 
 public class UserDTO {
 
-    private Long id;
     @NotEmpty
     @Size(min = 2, message = "username must be minimum of 4 characters")
     private String username;
@@ -21,20 +20,11 @@ public class UserDTO {
     public UserDTO() {
     }
 
-    public UserDTO(Long id, String username, String password, String email, String about) {
-        this.id = id;
+    public UserDTO(String username, String password, String email, String about) {
         this.username = username;
         this.password = password;
         this.email = email;
         this.about = about;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getUsername() {
