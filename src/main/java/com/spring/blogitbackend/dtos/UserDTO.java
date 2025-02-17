@@ -1,10 +1,21 @@
 package com.spring.blogitbackend.dtos;
 
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
+
 public class UserDTO {
+
     private Long id;
+    @NotEmpty
+    @Size(min = 2, message = "username must be minimum of 4 characters")
     private String username;
+    @NotEmpty
+    @Size(min = 4, message = "password must be minimum of 4 characters")
     private String password;
+    @Email
     private String email;
+    @NotEmpty
     private String about;
 
     public UserDTO() {
