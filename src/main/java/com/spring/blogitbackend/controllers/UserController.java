@@ -1,6 +1,7 @@
 package com.spring.blogitbackend.controllers;
 
 import com.spring.blogitbackend.dtos.UserDTO;
+import com.spring.blogitbackend.payloads.ApiResponse;
 import com.spring.blogitbackend.services.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -43,7 +44,8 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
-    public boolean deleteUser(@PathVariable Long id) {
-        return userService.deleteUser(id);
+    public ResponseEntity<ApiResponse> deleteUser(@PathVariable Long id) {
+        boolean success = userService.deleteUser(id);
+        return new ResponseEntity<>(new ApiResponse("user deleted!",true),HttpStatus.OK);
     }
 }
