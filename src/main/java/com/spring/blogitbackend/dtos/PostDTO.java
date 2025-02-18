@@ -5,14 +5,16 @@ import java.time.LocalDateTime;
 
 public class PostDTO {
 
+    private Long id;
     private String title;
     private String content;
     private String imageUrl;
-    private String category;
     private LocalDateTime createdAt;
+    private CategoryDTO category;
     private UserDTO user;
 
-    public PostDTO(String title, String content, String imageUrl, String category, LocalDateTime createdAt, UserDTO user) {
+    public PostDTO(Long id, String title, String content, String imageUrl, CategoryDTO category, LocalDateTime createdAt, UserDTO user) {
+        this.id = id;
         this.title = title;
         this.content = content;
         this.imageUrl = imageUrl;
@@ -22,6 +24,14 @@ public class PostDTO {
     }
 
     public PostDTO() {
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public UserDTO getUser() {
@@ -64,11 +74,11 @@ public class PostDTO {
         this.imageUrl = imageUrl;
     }
 
-    public String getCategory() {
+    public CategoryDTO getCategory() {
         return category;
     }
 
-    public void setCategory(String category) {
+    public void setCategory(CategoryDTO category) {
         this.category = category;
     }
 }

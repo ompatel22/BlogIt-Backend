@@ -1,9 +1,11 @@
 package com.spring.blogitbackend.services;
 
 import com.spring.blogitbackend.dtos.PostDTO;
+import com.spring.blogitbackend.entities.Category;
 import com.spring.blogitbackend.entities.Post;
 import com.spring.blogitbackend.entities.User;
 import com.spring.blogitbackend.exceptions.ResourceNotFoundException;
+import com.spring.blogitbackend.repositories.CategoryRepository;
 import com.spring.blogitbackend.repositories.PostRepository;
 import com.spring.blogitbackend.repositories.UserRepository;
 import org.modelmapper.ModelMapper;
@@ -18,22 +20,24 @@ public class PostService {
     private final PostRepository postRepository;
     private final UserRepository userRepository;
     private final ModelMapper modelMapper;
+    private final CategoryRepository categoryRepository;
 
-    public PostService(PostRepository postRepository, ModelMapper modelMapper, UserRepository userRepository) {
+    public PostService(PostRepository postRepository, ModelMapper modelMapper, UserRepository userRepository, CategoryRepository categoryRepository) {
         this.modelMapper = modelMapper;
         this.postRepository = postRepository;
         this.userRepository = userRepository;
+        this.categoryRepository = categoryRepository;
     }
 
-    public PostDTO createPost(PostDTO postDTO, Long uid) {
-
+    public PostDTO createPost(PostDTO postDTO, Long uid, Long cid) {
+        Category category = categoryRepository.findById(cid).orElseThrow(() -> new ResourceNotFoundException("Category", "id", cid));
         User user = userRepository.findById(uid).orElseThrow(() -> new ResourceNotFoundException("User","id",uid));
         Post post = modelMapper.map(postDTO, Post.class);
 
         post.setTitle(postDTO.getTitle());
         post.setContent(postDTO.getContent());
         post.setImageUrl(postDTO.getImageUrl());
-        post.setCategory(postDTO.getCategory());
+        post.setCategory(category);
         post.setCreatedAt(LocalDateTime.now());
         post.setUser(user);
 
@@ -55,8 +59,7 @@ public class PostService {
         post.setTitle(postDTO.getTitle());
         post.setContent(postDTO.getContent());
         post.setImageUrl(postDTO.getImageUrl());
-        post.setCategory(postDTO.getCategory());
-//        post.setCreatedAt(LocalDateTime.now());
+        post.setCreatedAt(LocalDateTime.now());
         return modelMapper.map(postRepository.save(post), PostDTO.class);
     }
 
