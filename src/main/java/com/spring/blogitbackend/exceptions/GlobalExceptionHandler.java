@@ -32,4 +32,10 @@ public class GlobalExceptionHandler {
         });
         return new ResponseEntity<>(map,HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(ImageUploadException.class)
+    public ResponseEntity<ApiResponse> imageUploadExceptionHandler(ImageUploadException exception) {
+        String message = exception.getMessage();
+        return new ResponseEntity<>(new ApiResponse(message,false),HttpStatus.BAD_REQUEST);
+    }
 }

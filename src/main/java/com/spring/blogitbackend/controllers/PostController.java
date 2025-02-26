@@ -2,25 +2,28 @@ package com.spring.blogitbackend.controllers;
 
 import com.spring.blogitbackend.constants.AppConstants;
 import com.spring.blogitbackend.dtos.PostDTO;
+import com.spring.blogitbackend.entities.Post;
 import com.spring.blogitbackend.payloads.ApiResponse;
 import com.spring.blogitbackend.payloads.PostResponse;
+import com.spring.blogitbackend.services.FileService;
 import com.spring.blogitbackend.services.PostService;
 import jakarta.validation.Valid;
-import jakarta.websocket.server.PathParam;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1")
 public class PostController {
 
-    final PostService postService;
+    private final PostService postService;
+    private final FileService fileService;
 
-    public PostController(PostService postService) {
+    public PostController(PostService postService,FileService fileService) {
+        this.fileService = fileService;
         this.postService = postService;
     }
 
@@ -40,7 +43,7 @@ public class PostController {
                                                     @RequestParam(value = "pageSize", defaultValue = AppConstants.PAGE_SIZE, required = false) Integer pageSize,
                                                     @RequestParam(value = "sortBy", defaultValue = AppConstants.SORT_BY, required = false) String sortBy,
                                                     @RequestParam(value = "sortDir", defaultValue = AppConstants.SORT_DIR, required = false) String sortDir) {
-        return new ResponseEntity<>(postService.getAllPosts(pageNumber,pageSize,sortBy,sortDir), HttpStatus.OK);
+        return new ResponseEntity<>(postService.getAllPosts(pageNumber, pageSize, sortBy, sortDir), HttpStatus.OK);
     }
 
     @PutMapping("/posts/{postId}")
@@ -70,5 +73,17 @@ public class PostController {
     public ResponseEntity<List<PostDTO>> serachPostByTitle(@PathVariable String keyword) {
         List<PostDTO> postDTOS = postService.searchPosts(keyword);
         return new ResponseEntity<>(postDTOS, HttpStatus.OK);
+    }
+
+    @PostMapping("/post/{postId}/img/upload")
+    public ResponseEntity<PostDTO> uploadImage(@RequestParam("img") MultipartFile img, @PathVariable Long postId) {
+
+        PostDTO post = postService.getPostById(postId);
+
+        ApiResponse resp = fileService.uploadImage(img);
+
+        post.setImageUrl(resp.getMessage());
+        PostDTO updatedPost = postService.updatePost(post, postId);
+        return new ResponseEntity<>(updatedPost,HttpStatus.OK);
     }
 }
