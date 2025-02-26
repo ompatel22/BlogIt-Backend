@@ -107,5 +107,8 @@ public class PostService {
         return posts.stream().map(post -> modelMapper.map(post, PostDTO.class)).collect(Collectors.toList());
     }
 
-//    public List<PostDTO> searchPosts(String keyword){}
+    public List<PostDTO> searchPosts(String keyword){
+        List<Post> posts = postRepository.findByTitleContainingIgnoreCase(keyword);
+        return posts.stream().map(post -> modelMapper.map(post, PostDTO.class)).collect(Collectors.toList());
+    }
 }
