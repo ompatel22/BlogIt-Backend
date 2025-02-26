@@ -13,6 +13,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -48,11 +49,13 @@ public class PostService {
         return modelMapper.map(postRepository.save(post), PostDTO.class);
     }
 
-    public PostResponse getAllPosts(Integer pageNumber, Integer pageSize) {
-        //int pageSize = 5;
-        //int pageNumber = 1;
+    public PostResponse getAllPosts(Integer pageNumber, Integer pageSize, String sortBy, String sortDir) {
 
-        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+        Sort sort = (sortDir.equalsIgnoreCase("desc")) ? Sort.by(sortBy).descending() : Sort.by(sortBy).ascending();
+
+        //Sort sort = Sort.by(sortDir, sortBy);-->not working
+
+        Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
 
         Page<Post> pagePosts = postRepository.findAll(pageable);
         List<Post> posts = pagePosts.getContent();
