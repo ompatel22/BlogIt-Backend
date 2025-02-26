@@ -1,11 +1,17 @@
 package com.spring.blogitbackend.dtos;
 
+import jakarta.validation.constraints.NotBlank;
+
 public class CategoryDTO {
     private Long id;
+    @NotBlank
     private String categoryName;
+    @NotBlank
     private String description;
+
     public CategoryDTO() {
     }
+
     public CategoryDTO(Long id, String categoryName, String description) {
         this.id = id;
         this.categoryName = categoryName;

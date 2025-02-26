@@ -71,8 +71,17 @@ public class PostService {
         return true;
     }
 
-//    public List<PostDTO> getPostByCategory(String category) {}
-//    public List<PostDTO> getPostsByUser(Long uid){}
-//    public List<PostDTO> searchPosts(String keyword){}
+    public List<PostDTO> getPostByCategory(Long categoryId) {
+        Category cat = categoryRepository.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException("Category", "id", categoryId));
+        List<Post> posts = postRepository.findByCategory(cat);
+        return posts.stream().map(post -> modelMapper.map(post, PostDTO.class)).collect(Collectors.toList());
+    }
 
+    public List<PostDTO> getPostsByUser(Long uid){
+        User user = userRepository.findById(uid).orElseThrow(()->new ResourceNotFoundException("User","id",uid));
+        List<Post> posts = postRepository.findByUser(user);
+        return posts.stream().map(post -> modelMapper.map(post, PostDTO.class)).collect(Collectors.toList());
+    }
+
+//    public List<PostDTO> searchPosts(String keyword){}
 }

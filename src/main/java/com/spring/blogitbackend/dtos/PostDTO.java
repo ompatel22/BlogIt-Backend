@@ -1,12 +1,16 @@
 package com.spring.blogitbackend.dtos;
 
+import jakarta.validation.constraints.NotBlank;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class PostDTO {
 
     private Long id;
+    @NotBlank
     private String title;
+    @NotBlank
     private String content;
     private String imageUrl;
     private LocalDateTime createdAt;

@@ -4,6 +4,7 @@ import com.spring.blogitbackend.dtos.CategoryDTO;
 import com.spring.blogitbackend.payloads.ApiResponse;
 import com.spring.blogitbackend.services.CategoryService;
 import jakarta.servlet.ServletResponse;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -22,7 +23,7 @@ public class CategoryController {
     }
 
     @PostMapping
-    public ResponseEntity<CategoryDTO> addCategory(@RequestBody CategoryDTO category) {
+    public ResponseEntity<CategoryDTO> addCategory(@Valid @RequestBody CategoryDTO category) {
         return new ResponseEntity<>(categoryService.createCategory(category),HttpStatus.CREATED);
     }
 
@@ -37,7 +38,7 @@ public class CategoryController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<CategoryDTO> updateCategory(@RequestBody CategoryDTO category, @PathVariable Long id) {
+    public ResponseEntity<CategoryDTO> updateCategory(@Valid @RequestBody CategoryDTO category, @PathVariable Long id) {
         return new ResponseEntity<>(categoryService.updateCategory(category, id), HttpStatus.OK);
     }
 
