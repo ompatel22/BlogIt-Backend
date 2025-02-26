@@ -2,8 +2,10 @@ package com.spring.blogitbackend.controllers;
 
 import com.spring.blogitbackend.dtos.PostDTO;
 import com.spring.blogitbackend.payloads.ApiResponse;
+import com.spring.blogitbackend.payloads.PostResponse;
 import com.spring.blogitbackend.services.PostService;
 import jakarta.validation.Valid;
+import jakarta.websocket.server.PathParam;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -33,8 +35,9 @@ public class PostController {
     }
 
     @GetMapping("/posts")
-    public ResponseEntity<List<PostDTO>> getAllPosts() {
-        return new ResponseEntity<>(postService.getAllPosts(), HttpStatus.OK);
+    public ResponseEntity<PostResponse> getAllPosts(@RequestParam(value = "pageNumber", defaultValue = "0", required = false) Integer pageNumber,
+                                                    @RequestParam(value = "pageSize", defaultValue = "5", required = false) Integer pageSize) {
+        return new ResponseEntity<>(postService.getAllPosts(pageNumber,pageSize), HttpStatus.OK);
     }
 
     @PutMapping("/posts/{postId}")

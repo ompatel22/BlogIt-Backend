@@ -5,10 +5,14 @@ import com.spring.blogitbackend.entities.Category;
 import com.spring.blogitbackend.entities.Post;
 import com.spring.blogitbackend.entities.User;
 import com.spring.blogitbackend.exceptions.ResourceNotFoundException;
+import com.spring.blogitbackend.payloads.PostResponse;
 import com.spring.blogitbackend.repositories.CategoryRepository;
 import com.spring.blogitbackend.repositories.PostRepository;
 import com.spring.blogitbackend.repositories.UserRepository;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -44,9 +48,26 @@ public class PostService {
         return modelMapper.map(postRepository.save(post), PostDTO.class);
     }
 
-    public List<PostDTO> getAllPosts() {
-        List<Post> posts = postRepository.findAll();
-        return posts.stream().map(post -> modelMapper.map(post, PostDTO.class)).collect(Collectors.toList());
+    public PostResponse getAllPosts(Integer pageNumber, Integer pageSize) {
+        //int pageSize = 5;
+        //int pageNumber = 1;
+
+        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+
+        Page<Post> pagePosts = postRepository.findAll(pageable);
+        List<Post> posts = pagePosts.getContent();
+
+        List<PostDTO> postDTOS = posts.stream().map(post -> modelMapper.map(post, PostDTO.class)).collect(Collectors.toList());
+
+        PostResponse postResponse = new PostResponse();
+        postResponse.setPosts(postDTOS);
+        postResponse.setTotalPosts(posts.size());
+        postResponse.setTotalPages(pagePosts.getTotalPages());
+        postResponse.setPageNumber(pagePosts.getNumber());
+        postResponse.setPageSize(pagePosts.getSize());
+        postResponse.setLastPage(pagePosts.isLast());
+
+        return postResponse;
     }
 
     public PostDTO getPostById(Long pid){
