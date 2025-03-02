@@ -38,19 +38,24 @@ public class CommentService {
         cmt.setUser(user);
         cmt.setCreatedAt(LocalDateTime.now());
         cmt = commentRepository.save(cmt);
-        return modelMapper.map(cmt,CommentDTO.class);
+        //return modelMapper.map(cmt,CommentDTO.class);
+        return convertToCommentDTO(cmt);
     }
 
 
     public List<CommentDTO> getAllComments(Long postId) {
         Post post = postRepository.findById(postId).orElseThrow(()-> new ResourceNotFoundException("Post", "id", postId));
         List<Comment> comments = post.getComments();
-        return comments.stream().map(comment -> modelMapper.map(comment,CommentDTO.class)).collect(Collectors.toList());
+        return comments.stream().map(comment -> convertToCommentDTO(comment)).collect(Collectors.toList());
     }
 
     public ApiResponse deleteComment(Long commentId) {
         Comment cmt= commentRepository.findById(commentId).orElseThrow(()->new ResourceNotFoundException("Comment","id",commentId));
         commentRepository.delete(cmt);
         return new ApiResponse("successfully deleted!",true);
+    }
+
+    public CommentDTO convertToCommentDTO(Comment cmt) {
+        return new CommentDTO(cmt.getId(),cmt.getContent(),cmt.getUser().getUsername(),cmt.getCreatedAt());
     }
 }

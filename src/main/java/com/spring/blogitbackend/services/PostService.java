@@ -1,7 +1,9 @@
 package com.spring.blogitbackend.services;
 
+import com.spring.blogitbackend.dtos.CommentDTO;
 import com.spring.blogitbackend.dtos.PostDTO;
 import com.spring.blogitbackend.entities.Category;
+import com.spring.blogitbackend.entities.Comment;
 import com.spring.blogitbackend.entities.Post;
 import com.spring.blogitbackend.entities.User;
 import com.spring.blogitbackend.exceptions.ResourceNotFoundException;
@@ -114,8 +116,15 @@ public class PostService {
 
     public PostDTO convertToDto(Post post) {
         PostDTO postDTO = modelMapper.map(post, PostDTO.class);
+        List<Comment> cmts= post.getComments();
+        List<CommentDTO> cmtDTOs=cmts.stream().map(comment -> convertToCommentDTO(comment)).collect(Collectors.toList());
+        postDTO.setComments(cmtDTOs);
         postDTO.setCommentCount(post.getComments().size());
         return postDTO;
 
+    }
+
+    public CommentDTO convertToCommentDTO(Comment cmt) {
+        return new CommentDTO(cmt.getId(),cmt.getContent(),cmt.getUser().getUsername(),cmt.getCreatedAt());
     }
 }

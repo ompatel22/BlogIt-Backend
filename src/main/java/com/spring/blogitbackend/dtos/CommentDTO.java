@@ -7,15 +7,16 @@ import java.time.LocalDateTime;
 public class CommentDTO {
     private Long id;
     private String content;
-    private UserDTO user;
+    private String username;
     private LocalDateTime createdAt;
 
     public CommentDTO() {}
 
-    public CommentDTO(Long id, String content, UserDTO user, LocalDateTime createdAt) {
+    public CommentDTO(Long id, String content, String username, LocalDateTime createdAt) {
         this.id = id;
         this.content = content;
-        this.user = user;
+        this.username = username;
+        this.createdAt = createdAt;
     }
 
     public Long getId() {
@@ -34,12 +35,12 @@ public class CommentDTO {
         this.content = content;
     }
 
-    public UserDTO getUser() {
-        return user;
+    public String getUsername() {
+        return username;
     }
 
-    public void setUser(UserDTO user) {
-        this.user = user;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public LocalDateTime getCreatedAt() {
