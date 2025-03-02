@@ -42,6 +42,13 @@ public class CommentService {
         return convertToCommentDTO(cmt);
     }
 
+    public CommentDTO updateComment(CommentDTO comment, Long postId) {
+        Comment cmt = commentRepository.findById(postId).orElseThrow(()-> new ResourceNotFoundException("Comment", "id", postId));
+        cmt.setContent(comment.getContent());
+        cmt.setCreatedAt(LocalDateTime.now());
+        cmt = commentRepository.save(cmt);
+        return convertToCommentDTO(cmt);
+    }
 
     public List<CommentDTO> getAllComments(Long postId) {
         Post post = postRepository.findById(postId).orElseThrow(()-> new ResourceNotFoundException("Post", "id", postId));

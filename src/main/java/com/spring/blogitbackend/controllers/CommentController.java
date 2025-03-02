@@ -19,7 +19,7 @@ public class CommentController {
         this.commentService = commentService;
     }
 
-    @PostMapping("user/{userId}/post/{postId}/comments")
+    @PostMapping("/user/{userId}/post/{postId}/comments")
     public ResponseEntity<CommentDTO> createComment(@PathVariable Long userId,@PathVariable Long postId, @RequestBody CommentDTO commentDTO) {
         CommentDTO comment = commentService.saveComment(commentDTO, postId, userId);
         return new ResponseEntity<>(comment, HttpStatus.CREATED);
@@ -32,9 +32,13 @@ public class CommentController {
         return new ResponseEntity<>(comments, HttpStatus.OK);
     }
 
-    @DeleteMapping("comments/{commentId}")
+    @DeleteMapping("/comments/{commentId}")
     public ResponseEntity<ApiResponse> deleteComment(@PathVariable Long commentId) {
         return new ResponseEntity<>(commentService.deleteComment(commentId), HttpStatus.OK);
     }
 
+    @PutMapping("/comments/{commentId}")
+    public ResponseEntity<CommentDTO> updateComment(@PathVariable Long commentId, @RequestBody CommentDTO commentDTO) {
+        return new ResponseEntity<>(commentService.updateComment(commentDTO, commentId), HttpStatus.OK);
+    }
 }
