@@ -20,8 +20,9 @@ public class PostDTO {
     private int commentCount;
     private UserDTO user;
     private List<CommentDTO> comments;
+    private List<LikeDTO> likes;
 
-    public PostDTO(Long id, String title, String content, String imageUrl, CategoryDTO category, LocalDateTime createdAt, UserDTO user, List<CommentDTO> comments, int likeCount, int commentCount) {
+    public PostDTO(Long id, String title, String content, String imageUrl, CategoryDTO category, LocalDateTime createdAt, UserDTO user, List<CommentDTO> comments, int likeCount, int commentCount, List<LikeDTO> likes) {
         this.id = id;
         this.title = title;
         this.content = content;
@@ -32,9 +33,18 @@ public class PostDTO {
         this.comments = comments;
         this.likeCount = likeCount;
         this.commentCount = commentCount;
+        this.likes = likes;
     }
 
     public PostDTO() {
+    }
+
+    public List<LikeDTO> getLikes() {
+        return likes;
+    }
+
+    public void setLikes(List<LikeDTO> likes) {
+        this.likes = likes;
     }
 
     public int getLikeCount() {

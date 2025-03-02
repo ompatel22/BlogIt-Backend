@@ -29,10 +29,13 @@ public class Post {
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Comment> comments = new ArrayList<>();
 
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Like> likes = new ArrayList<>();
+
     public Post() {
     }
 
-    public Post(Long id, String title, String content, String imageUrl, LocalDateTime createdAt, User user, Category category, List<Comment> comments) {
+    public Post(Long id, String title, String content, String imageUrl, LocalDateTime createdAt, User user, Category category, List<Comment> comments, List<Like> likes) {
         this.id = id;
         this.title = title;
         this.content = content;
@@ -41,6 +44,15 @@ public class Post {
         this.user = user;
         this.category = category;
         this.comments = comments;
+        this.likes = likes;
+    }
+
+    public List<Like> getLikes() {
+        return likes;
+    }
+
+    public void setLikes(List<Like> likes) {
+        this.likes = likes;
     }
 
     public Long getId() {

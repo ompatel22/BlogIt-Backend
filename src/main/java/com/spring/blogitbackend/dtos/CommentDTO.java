@@ -1,11 +1,13 @@
 package com.spring.blogitbackend.dtos;
 
 import com.spring.blogitbackend.entities.Post;
+import jakarta.validation.constraints.NotBlank;
 
 import java.time.LocalDateTime;
 
 public class CommentDTO {
     private Long id;
+    @NotBlank
     private String content;
     private String username;
     private LocalDateTime createdAt;

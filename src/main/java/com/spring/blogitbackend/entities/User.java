@@ -1,6 +1,7 @@
 package com.spring.blogitbackend.entities;
 
 import jakarta.persistence.*;
+import org.apache.logging.log4j.util.Lazy;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,10 +22,13 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Comment> comments=new ArrayList<>();
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Like> likes=new ArrayList<>();
+
     public User() {
     }
 
-    public User(Long id, String username, String password, String email, String about, List<Post> posts, List<Comment> comments) {
+    public User(Long id, String username, String password, String email, String about, List<Post> posts, List<Comment> comments, List<Like> likes) {
         this.id = id;
         this.username = username;
         this.password = password;
@@ -32,6 +36,15 @@ public class User {
         this.about = about;
         this.posts = posts;
         this.comments = comments;
+        this.likes = likes;
+    }
+
+    public List<Like> getLikes() {
+        return likes;
+    }
+
+    public void setLikes(List<Like> likes) {
+        this.likes = likes;
     }
 
     public List<Comment> getComments() {
