@@ -18,16 +18,28 @@ public class User {
     @OneToMany(mappedBy = "user",cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Post> posts=new ArrayList<>();
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Comment> comments=new ArrayList<>();
+
     public User() {
     }
 
-    public User(Long id, String username, String password, String email, String about, List<Post> posts) {
+    public User(Long id, String username, String password, String email, String about, List<Post> posts, List<Comment> comments) {
         this.id = id;
         this.username = username;
         this.password = password;
         this.email = email;
         this.about = about;
         this.posts = posts;
+        this.comments = comments;
+    }
+
+    public List<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
     }
 
     public List<Post> getPosts() {

@@ -36,7 +36,7 @@ public class PostService {
 
     public PostDTO createPost(PostDTO postDTO, Long uid, Long cid) {
         Category category = categoryRepository.findById(cid).orElseThrow(() -> new ResourceNotFoundException("Category", "id", cid));
-        User user = userRepository.findById(uid).orElseThrow(() -> new ResourceNotFoundException("User","id",uid));
+        User user = userRepository.findById(uid).orElseThrow(() -> new ResourceNotFoundException("User", "id", uid));
         Post post = modelMapper.map(postDTO, Post.class);
 
         post.setTitle(postDTO.getTitle());
@@ -46,7 +46,7 @@ public class PostService {
         post.setCreatedAt(LocalDateTime.now());
         post.setUser(user);
 
-        return modelMapper.map(postRepository.save(post), PostDTO.class);
+        return convertToDto(post);
     }
 
     public PostResponse getAllPosts(Integer pageNumber, Integer pageSize, String sortBy, String sortDir) {
@@ -60,7 +60,7 @@ public class PostService {
         Page<Post> pagePosts = postRepository.findAll(pageable);
         List<Post> posts = pagePosts.getContent();
 
-        List<PostDTO> postDTOS = posts.stream().map(post -> modelMapper.map(post, PostDTO.class)).collect(Collectors.toList());
+        List<PostDTO> postDTOS = posts.stream().map(post -> convertToDto(post)).collect(Collectors.toList());
 
         PostResponse postResponse = new PostResponse();
         postResponse.setPosts(postDTOS);
@@ -73,23 +73,23 @@ public class PostService {
         return postResponse;
     }
 
-    public PostDTO getPostById(Long pid){
-        Post post= postRepository.findById(pid).orElseThrow(() -> new ResourceNotFoundException("Post","id",pid));
-        return modelMapper.map(post, PostDTO.class);
+    public PostDTO getPostById(Long pid) {
+        Post post = postRepository.findById(pid).orElseThrow(() -> new ResourceNotFoundException("Post", "id", pid));
+        return convertToDto(post);
     }
 
-    public PostDTO updatePost(PostDTO postDTO,Long pid) {
-        Post post=postRepository.findById(pid).orElseThrow(() -> new ResourceNotFoundException("Post","id",pid));
+    public PostDTO updatePost(PostDTO postDTO, Long pid) {
+        Post post = postRepository.findById(pid).orElseThrow(() -> new ResourceNotFoundException("Post", "id", pid));
         post.setTitle(postDTO.getTitle());
         post.setContent(postDTO.getContent());
         post.setImageUrl(postDTO.getImageUrl());
         post.setCreatedAt(LocalDateTime.now());
-        return modelMapper.map(postRepository.save(post), PostDTO.class);
+        return convertToDto(post);
     }
 
     public boolean deletePost(Long pid) {
-        if(!postRepository.existsById(pid)){
-            throw new ResourceNotFoundException("Post","id",pid);
+        if (!postRepository.existsById(pid)) {
+            throw new ResourceNotFoundException("Post", "id", pid);
         }
         postRepository.deleteById(pid);
         return true;
@@ -98,17 +98,24 @@ public class PostService {
     public List<PostDTO> getPostByCategory(Long categoryId) {
         Category cat = categoryRepository.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException("Category", "id", categoryId));
         List<Post> posts = postRepository.findByCategory(cat);
-        return posts.stream().map(post -> modelMapper.map(post, PostDTO.class)).collect(Collectors.toList());
+        return posts.stream().map(post -> convertToDto(post)).collect(Collectors.toList());
     }
 
-    public List<PostDTO> getPostsByUser(Long uid){
-        User user = userRepository.findById(uid).orElseThrow(()->new ResourceNotFoundException("User","id",uid));
+    public List<PostDTO> getPostsByUser(Long uid) {
+        User user = userRepository.findById(uid).orElseThrow(() -> new ResourceNotFoundException("User", "id", uid));
         List<Post> posts = postRepository.findByUser(user);
-        return posts.stream().map(post -> modelMapper.map(post, PostDTO.class)).collect(Collectors.toList());
+        return posts.stream().map(post -> convertToDto(post)).collect(Collectors.toList());
     }
 
-    public List<PostDTO> searchPosts(String keyword){
+    public List<PostDTO> searchPosts(String keyword) {
         List<Post> posts = postRepository.findByTitleContainingIgnoreCase(keyword);
-        return posts.stream().map(post -> modelMapper.map(post, PostDTO.class)).collect(Collectors.toList());
+        return posts.stream().map(post -> convertToDto(post)).collect(Collectors.toList());
+    }
+
+    public PostDTO convertToDto(Post post) {
+        PostDTO postDTO = modelMapper.map(post, PostDTO.class);
+        postDTO.setCommentCount(post.getComments().size());
+        return postDTO;
+
     }
 }

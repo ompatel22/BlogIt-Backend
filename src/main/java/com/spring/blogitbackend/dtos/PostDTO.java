@@ -4,6 +4,7 @@ import jakarta.validation.constraints.NotBlank;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class PostDTO {
 
@@ -15,9 +16,12 @@ public class PostDTO {
     private String imageUrl;
     private LocalDateTime createdAt;
     private CategoryDTO category;
+    private int likeCount;
+    private int commentCount;
     private UserDTO user;
+    private List<CommentDTO> comments;
 
-    public PostDTO(Long id, String title, String content, String imageUrl, CategoryDTO category, LocalDateTime createdAt, UserDTO user) {
+    public PostDTO(Long id, String title, String content, String imageUrl, CategoryDTO category, LocalDateTime createdAt, UserDTO user, List<CommentDTO> comments, int likeCount, int commentCount) {
         this.id = id;
         this.title = title;
         this.content = content;
@@ -25,9 +29,28 @@ public class PostDTO {
         this.category = category;
         this.createdAt = createdAt;
         this.user = user;
+        this.comments = comments;
+        this.likeCount = likeCount;
+        this.commentCount = commentCount;
     }
 
     public PostDTO() {
+    }
+
+    public int getLikeCount() {
+        return likeCount;
+    }
+
+    public void setLikeCount(int likeCount) {
+        this.likeCount = likeCount;
+    }
+
+    public int getCommentCount() {
+        return commentCount;
+    }
+
+    public void setCommentCount(int commentCount) {
+        this.commentCount = commentCount;
     }
 
     public Long getId() {
@@ -84,5 +107,13 @@ public class PostDTO {
 
     public void setCategory(CategoryDTO category) {
         this.category = category;
+    }
+
+    public List<CommentDTO> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<CommentDTO> comments) {
+        this.comments = comments;
     }
 }

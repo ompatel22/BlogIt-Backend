@@ -2,7 +2,6 @@ package com.spring.blogitbackend.controllers;
 
 import com.spring.blogitbackend.constants.AppConstants;
 import com.spring.blogitbackend.dtos.PostDTO;
-import com.spring.blogitbackend.entities.Post;
 import com.spring.blogitbackend.payloads.ApiResponse;
 import com.spring.blogitbackend.payloads.PostResponse;
 import com.spring.blogitbackend.services.FileService;

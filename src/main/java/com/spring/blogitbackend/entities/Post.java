@@ -3,6 +3,8 @@ package com.spring.blogitbackend.entities;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "post")
@@ -11,7 +13,7 @@ public class Post {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String title;
-    @Column(length = 2000)
+    @Column(length = 5000)
     private String content;
     private String imageUrl;
     private LocalDateTime createdAt;
@@ -24,10 +26,13 @@ public class Post {
     @JoinColumn(name = "category_id")
     private Category category;
 
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Comment> comments = new ArrayList<>();
+
     public Post() {
     }
 
-    public Post(Long id, String title, String content, String imageUrl, LocalDateTime createdAt, User user, Category category) {
+    public Post(Long id, String title, String content, String imageUrl, LocalDateTime createdAt, User user, Category category, List<Comment> comments) {
         this.id = id;
         this.title = title;
         this.content = content;
@@ -35,6 +40,7 @@ public class Post {
         this.createdAt = createdAt;
         this.user = user;
         this.category = category;
+        this.comments = comments;
     }
 
     public Long getId() {
@@ -91,5 +97,13 @@ public class Post {
 
     public void setCategory(Category category) {
         this.category = category;
+    }
+
+    public List<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
     }
 }
