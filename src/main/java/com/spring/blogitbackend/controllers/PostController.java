@@ -1,5 +1,6 @@
 package com.spring.blogitbackend.controllers;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.spring.blogitbackend.constants.AppConstants;
 import com.spring.blogitbackend.dtos.PostDTO;
 import com.spring.blogitbackend.payloads.ApiResponse;
@@ -16,6 +17,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1")
+@CrossOrigin(origins = "*")
 public class PostController {
 
     private final PostService postService;
@@ -27,10 +29,28 @@ public class PostController {
     }
 
     @PostMapping("/user/{userId}/category/{categoryId}/posts")
-    public ResponseEntity<PostDTO> createPost(@Valid @RequestBody PostDTO postDTO, @PathVariable Long userId, @PathVariable Long categoryId) {
+    public ResponseEntity<PostDTO> createPost(
+            @Valid @RequestPart(name = "postDTO") String postDTOJson,
+            @PathVariable Long userId,
+            @PathVariable Long categoryId,
+            @RequestPart(name = "img", required = false) MultipartFile img) {
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        PostDTO postDTO;
+        try {
+            postDTO = objectMapper.readValue(postDTOJson, PostDTO.class);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
+
+        if (img != null && !img.isEmpty()) {
+            ApiResponse resp = fileService.uploadImage(img);
+            postDTO.setImageUrl(resp.getMessage());
+        }
         PostDTO post = postService.createPost(postDTO, userId, categoryId);
         return new ResponseEntity<>(post, HttpStatus.CREATED);
     }
+
 
     @GetMapping("/posts/{postId}")
     public ResponseEntity<PostDTO> getPost(@PathVariable Long postId) {

@@ -45,7 +45,7 @@ public class PostService {
         post.setCategory(category);
         post.setCreatedAt(LocalDateTime.now());
         post.setUser(user);
-
+        postRepository.save(post);
         return convertToDto(post);
     }
 
@@ -116,15 +116,18 @@ public class PostService {
         PostDTO postDTO = modelMapper.map(post, PostDTO.class);
 
         List<Comment> cmts= post.getComments();
+        if(cmts!=null) {
         List<CommentDTO> cmtDTOs=cmts.stream().map(comment -> convertToCommentDTO(comment)).collect(Collectors.toList());
+        postDTO.setComments(cmtDTOs);
+        postDTO.setCommentCount(post.getComments().size());
+        }
 
         List<Like> likes= post.getLikes();
+        if(likes !=null){
         List<LikeDTO> likeDTOs=likes.stream().map(like -> convertToLikeDTO(like)).collect(Collectors.toList());
-
-        postDTO.setComments(cmtDTOs);
         postDTO.setLikes(likeDTOs);
-        postDTO.setCommentCount(post.getComments().size());
         postDTO.setLikeCount(post.getLikes().size());
+        }
 
         return postDTO;
     }
