@@ -3,7 +3,6 @@ package com.spring.blogitbackend.controllers;
 import com.spring.blogitbackend.dtos.CategoryDTO;
 import com.spring.blogitbackend.payloads.ApiResponse;
 import com.spring.blogitbackend.services.CategoryService;
-import jakarta.servlet.ServletResponse;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

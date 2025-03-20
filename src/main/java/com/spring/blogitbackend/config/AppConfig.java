@@ -27,4 +27,9 @@ public class AppConfig {
         config.put("api_secret", dotenv.get("API_SECRET"));
         return new Cloudinary(config);
     }
+
+    @Bean
+    public Dotenv dotenv() {
+        return Dotenv.load(); // Loads .env file automatically
+    }
 }
