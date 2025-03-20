@@ -1,5 +1,6 @@
 package com.spring.blogitbackend.controllers;
 
+import com.spring.blogitbackend.dtos.LoginRequest;
 import com.spring.blogitbackend.dtos.UserDTO;
 import com.spring.blogitbackend.payloads.ApiResponse;
 import com.spring.blogitbackend.services.UserService;
@@ -21,6 +22,13 @@ public class UserController {
         this.userService = userService;
     }
 
+    @PostMapping("/login")
+    public ResponseEntity<UserDTO> login(@RequestBody @Valid LoginRequest request) {
+        System.out.println(request.getUsernameOrEmail());
+        System.out.println(request.getPassword());
+        UserDTO userDTO = userService.login(request.getUsernameOrEmail(), request.getPassword());
+        return new ResponseEntity<>(userDTO, HttpStatus.OK);
+    }
     @GetMapping("/{id}")
     public ResponseEntity<UserDTO> getUser(@PathVariable Long id) {
         UserDTO userDTO = userService.getUserById(id);

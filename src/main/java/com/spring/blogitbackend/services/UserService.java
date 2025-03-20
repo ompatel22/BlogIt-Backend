@@ -7,6 +7,7 @@ import com.spring.blogitbackend.repositories.UserRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -22,8 +23,13 @@ public class UserService {
 
     public UserDTO createUser(UserDTO userDTO) {
         User user = modelMapper.map(userDTO, User.class);
-        user = userRepository.save(user);
-        return modelMapper.map(user, UserDTO.class);
+        User existingUserByUserName = userRepository.findByUsername(userDTO.getUsername());
+        User existUserByEmail = userRepository.findByEmail(userDTO.getEmail());
+        if(existingUserByUserName == null && existUserByEmail == null) {
+            user = userRepository.save(user);
+            return modelMapper.map(user, UserDTO.class);
+        }
+        throw new RuntimeException("User already exists");
     }
 
     public UserDTO updateUser(UserDTO userDTO, Long id) {
@@ -53,6 +59,38 @@ public class UserService {
         List<User> users = userRepository.findAll();
         List<UserDTO> userDTOs = users.stream().map(user -> modelMapper.map(user, UserDTO.class)).collect(Collectors.toList());
         return userDTOs;
+    }
+
+    public UserDTO login(String usernameOrEmail, String password) {
+        String email = "";
+        String username="";
+        if(usernameOrEmail.contains("@")){
+            email = usernameOrEmail;
+        }
+        else {
+            username=usernameOrEmail;
+        }
+        if(!email.isEmpty()){
+            System.out.println(email);
+            User user = userRepository.findByEmail(email);
+            if(user != null) {
+                if(user.getPassword().equals(password)) {
+                    return modelMapper.map(user, UserDTO.class);
+                }
+            }
+//            throw new RuntimeException("Invalid email or password");
+        }
+        else if(!username.isEmpty()){
+            System.out.println(username);
+            User user = userRepository.findByUsername(username);
+            if(user != null) {
+                if(user.getPassword().equals(password)) {
+                    return modelMapper.map(user, UserDTO.class);
+                }
+            }
+//            throw new RuntimeException("Invalid email or password");
+        }
+        throw new RuntimeException("Invalid email or password");
     }
 
 }
