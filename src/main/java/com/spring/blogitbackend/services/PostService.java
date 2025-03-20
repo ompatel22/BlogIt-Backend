@@ -137,6 +137,6 @@ public class PostService {
     }
 
     public LikeDTO convertToLikeDTO(Like like) {
-        return new LikeDTO(like.getId(),like.getUser().getUsername());
+        return new LikeDTO(like.getId(),like.getUser().getId(),like.getUser().getUsername());
     }
 }

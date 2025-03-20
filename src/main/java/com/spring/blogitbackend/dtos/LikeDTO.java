@@ -2,13 +2,15 @@ package com.spring.blogitbackend.dtos;
 
 public class LikeDTO {
     private Long id;
+    private Long userId;
     private String username;
 
     public LikeDTO() {
     }
 
-    public LikeDTO(Long id, String username) {
+    public LikeDTO(Long id, Long uid, String username) {
         this.id = id;
+        this.userId = uid;
         this.username = username;
     }
 
@@ -26,5 +28,13 @@ public class LikeDTO {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 }
