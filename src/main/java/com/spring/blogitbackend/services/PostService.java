@@ -107,6 +107,20 @@ public class PostService {
         return posts.stream().map(post -> convertToDto(post)).collect(Collectors.toList());
     }
 
+    public List<PostDTO> getPostsByUserLikes(Long uid) {
+        User user = userRepository.findById(uid).orElseThrow(() -> new ResourceNotFoundException("User", "id", uid));
+        List<Like> likes = user.getLikes();
+        List<Post> posts = likes.stream().map(like -> like.getPost()).collect(Collectors.toList());
+        return posts.stream().map(post -> convertToDto(post)).collect(Collectors.toList());
+    }
+
+    public List<PostDTO> getPostsByUserComments(Long uid) {
+        User user = userRepository.findById(uid).orElseThrow(() -> new ResourceNotFoundException("User", "id", uid));
+        List<Comment> comments = user.getComments();
+        List<Post> posts = comments.stream().map(cmm -> cmm.getPost()).collect(Collectors.toList());
+        return posts.stream().map(post -> convertToDto(post)).collect(Collectors.toList());
+    }
+
     public List<PostDTO> searchPosts(String keyword) {
         List<Post> posts = postRepository.findByTitleContainingIgnoreCase(keyword);
         return posts.stream().map(post -> convertToDto(post)).collect(Collectors.toList());

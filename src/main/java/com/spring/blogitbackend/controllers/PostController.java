@@ -105,4 +105,14 @@ public class PostController {
         PostDTO updatedPost = postService.updatePost(post, postId);
         return new ResponseEntity<>(updatedPost,HttpStatus.OK);
     }
+
+    @GetMapping("/user/{userId}/liked/posts")
+    public ResponseEntity<List<PostDTO>> getLikedPostsByUserId(@PathVariable Long userId) {
+        return new ResponseEntity<>(postService.getPostsByUserLikes(userId), HttpStatus.OK);
+    }
+
+    @GetMapping("/user/{userId}/commented/posts")
+    public ResponseEntity<List<PostDTO>> getCommentedPostsByUserId(@PathVariable Long userId) {
+        return new ResponseEntity<>(postService.getPostsByUserComments(userId), HttpStatus.OK);
+    }
 }
