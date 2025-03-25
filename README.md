@@ -19,7 +19,6 @@ This is the backend repository for the Blogging Web App, built using Spring Boot
 Make sure you have the following installed:
 - [Java 17+](https://adoptopenjdk.net/)
 - [Maven](https://maven.apache.org/) (for dependency management)
-- [PostgreSQL](https://www.postgresql.org/) (if running locally)
 
 ### Environment Variables
 Before running the project, create a `.env` file in the root directory and provide the following details:
